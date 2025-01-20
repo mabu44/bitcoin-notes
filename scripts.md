@@ -1,7 +1,5 @@
 # Bitcoin transactions scripts
 
-Disclaimer: These notes may contain errors or inaccuracies. If you spot any mistakes or have suggestions for improvement, please let me know.
-
 ## General concepts
 - Ouput script :lock: : is set when the UTXO is created, usually decoding the address provided by the receiver. It represents the condition to spend the funds. It is part of the outputs and it is stored in the UTXO set of all nodes.
 - Input script :key: : the script that is used to unlock the UTXO depending on its output script. It must satisfy the conditions expressed in the output script. Is in the input so it is only stored on the blockchain but not in the UTXO set. 
