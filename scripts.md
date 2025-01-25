@@ -30,7 +30,7 @@ Resulting program (if RedeemScript hash is correct) :unlock: : `...data and sign
 - Input script : empty
 - Witness :key: : `<Sig> <PubKey>`
 
-Resulting program :unlock: : `<Sig> <PubKey> OP_DUP OP_HASH160 <PubKeyHash160> OP_EQUAL OP_CHECKSIG` (most operators are implicit in the transaction but explicitly signed in \<Sig\>)
+Resulting program :unlock: : `<Sig> <PubKey> OP_DUP OP_HASH160 <PubKeyHash160> OP_EQUALVERIFY OP_CHECKSIG` (most operators are implicit in the transaction but explicitly signed in \<Sig\>, see [BIP 143 Specifications](https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki#specification)).
 
 ## P2WSH
 - Output script :lock: : `OP_0 <RedeemScriptHash256>` (exactly as it is!)
