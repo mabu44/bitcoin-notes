@@ -7,7 +7,7 @@ Specifically, we need to have an active instance of bitcoind on regtest as descr
 
 Create a wallet
 ```bash
-./bc -regtest createwallet ephemeral_dust
+bcli29 -regtest createwallet ephemeral_dust
 ```
 
 ```bash
@@ -17,7 +17,7 @@ Create a wallet
 ```
 Mine 101 blocks.
 ```bash
-./bc -regtest generatetoaddress 101 $(./bc -regtest getnewaddress)
+bcli29 -regtest generatetoaddress 101 $(bcli29 -regtest getnewaddress)
 ```
 ```bash
 [
@@ -28,7 +28,7 @@ Mine 101 blocks.
 ```
 We now have one regtest spendable UTXO.
 ```bash
-./bc -regtest listunspent
+bcli29 -regtest listunspent
 ```
 ```bash
 [
@@ -55,14 +55,14 @@ We now have one regtest spendable UTXO.
 
 We will send the ephemeral dust output to a new address, so we need to get one first:
 ```bash
-./bc -regtest getnewaddress
+bcli29 -regtest getnewaddress
 ```
 ```bash
 bcrt1q7wyyxrlrx0vxuqvt0k6x8x4r9uurezslsm6vjw
 ```
 We now create a zero-fee transaction spending our UTXO. The transaction has one zero-amount output (the ephemeral dust output) and another output that sends back the rest of the funds.
 ```bash
-./bc -regtest createrawtransaction '[{"txid":"497de4de4a54ac38bb9142bf0b1db743c5a972b71ec0b40adcbb42fca09dd225","vout":0}]' \
+bcli29 -regtest createrawtransaction '[{"txid":"497de4de4a54ac38bb9142bf0b1db743c5a972b71ec0b40adcbb42fca09dd225","vout":0}]' \
     '[{"bcrt1q7wyyxrlrx0vxuqvt0k6x8x4r9uurezslsm6vjw":0},{"bcrt1qptldwfem24ueajmpmxny65het0f067ah5jvuhx":50}]'
 ```
 ```bash
@@ -78,7 +78,7 @@ We get this result:
 
 We decode the previously created transaction to get the transaction id and the scriptPubKey hex value, that are required in the next steps.
 ```bash
-./bc -regtest decoderawtransaction 030000000125d29da0fc42bbdc0ab4c01eb772a9c543b71d0bbf4291bb38ac544adee47d490000000000fdffffff020000000000000000160014f388430fe333d86e018b7db4639aa32f383c8a1f00f2052a010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb700000000
+bcli29 -regtest decoderawtransaction 030000000125d29da0fc42bbdc0ab4c01eb772a9c543b71d0bbf4291bb38ac544adee47d490000000000fdffffff020000000000000000160014f388430fe333d86e018b7db4639aa32f383c8a1f00f2052a010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb700000000
 ```
 ```bash
 {
@@ -128,7 +128,7 @@ We decode the previously created transaction to get the transaction id and the s
 ```
 We now want to spend this transaction outputs. The child transaction must also spend the ephemeral dust to be accepted. We spend both outputs of the previous transaction and we add a fee that will pay for the entire package.
 ```bash
-./bc -regtest createrawtransaction '[{"txid":"e13f9b8c6cc2fe52f3ceae7d651d138a48b1adcbb4046513bddd6cce31c3f612","vout":0},{"txid":"e13f9b8c6cc2fe52f3ceae7d651d138a48b1adcbb4046513bddd6cce31c3f612","vout":1}]' \
+bcli29 -regtest createrawtransaction '[{"txid":"e13f9b8c6cc2fe52f3ceae7d651d138a48b1adcbb4046513bddd6cce31c3f612","vout":0},{"txid":"e13f9b8c6cc2fe52f3ceae7d651d138a48b1adcbb4046513bddd6cce31c3f612","vout":1}]' \
   '[{"bcrt1qptldwfem24ueajmpmxny65het0f067ah5jvuhx":49.995}]'
 ```
 ```bash
@@ -141,7 +141,7 @@ Also in this case, we need to convert to a v3 transaction:
 ### Signing
 We sign the first transaction:
 ```bash
-./bc -regtest signrawtransactionwithwallet 030000000125d29da0fc42bbdc0ab4c01eb772a9c543b71d0bbf4291bb38ac544adee47d490000000000fdffffff020000000000000000160014f388430fe333d86e018b7db4639aa32f383c8a1f00f2052a010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb700000000
+bcli29 -regtest signrawtransactionwithwallet 030000000125d29da0fc42bbdc0ab4c01eb772a9c543b71d0bbf4291bb38ac544adee47d490000000000fdffffff020000000000000000160014f388430fe333d86e018b7db4639aa32f383c8a1f00f2052a010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb700000000
 ```
 ```bash
 {
@@ -151,7 +151,7 @@ We sign the first transaction:
 ```
 And we sign the second transaction, by also providing the txid, vout, scriptPubKey and amount of the outputs of the first transaction.
 ```bash
-./bc -regtest signrawtransactionwithwallet 030000000212f6c331ce6cddbd136504b4cbadb1488a131d657daecef352fec26c8c9b3fe10000000000fdffffff12f6c331ce6cddbd136504b4cbadb1488a131d657daecef352fec26c8c9b3fe10100000000fdffffff01e050fe29010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb700000000 \
+bcli29 -regtest signrawtransactionwithwallet 030000000212f6c331ce6cddbd136504b4cbadb1488a131d657daecef352fec26c8c9b3fe10000000000fdffffff12f6c331ce6cddbd136504b4cbadb1488a131d657daecef352fec26c8c9b3fe10100000000fdffffff01e050fe29010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb700000000 \
   '[{"txid":"e13f9b8c6cc2fe52f3ceae7d651d138a48b1adcbb4046513bddd6cce31c3f612","vout":0,"scriptPubKey":"0014f388430fe333d86e018b7db4639aa32f383c8a1f","amount":0},{"txid":"e13f9b8c6cc2fe52f3ceae7d651d138a48b1adcbb4046513bddd6cce31c3f612","vout":1,"scriptPubKey":"00140afed7273b55799ecb61d9a64d52f95bd2fd7bb7","amount":50}]'
 ```
 ```
@@ -162,7 +162,7 @@ And we sign the second transaction, by also providing the txid, vout, scriptPubK
 ```
 We now try to submit the package containing the two signed transactions to the mempool:
 ```bash
-./bc -regtest submitpackage '["0300000000010125d29da0fc42bbdc0ab4c01eb772a9c543b71d0bbf4291bb38ac544adee47d490000000000fdffffff020000000000000000160014f388430fe333d86e018b7db4639aa32f383c8a1f00f2052a010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb7024730440220374145de40a11bcbd026ea561f875ec860215dd7bd25398016176704e337f17102201824e4eb302ae69d90c3543499e827fe0c7fac6720674eb397bbb9dbc144d3a1012102d9886aab1b63baf6813d435693f2f8be99252a8950f0796f7ad883901ec20ad800000000","0300000000010212f6c331ce6cddbd136504b4cbadb1488a131d657daecef352fec26c8c9b3fe10000000000fdffffff12f6c331ce6cddbd136504b4cbadb1488a131d657daecef352fec26c8c9b3fe10100000000fdffffff01e050fe29010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb70247304402204ea136829cd08c80b01389c33eff37ca6e0b3e6a11b20fbf63ddb6dfc29465a8022010d36e685dd4ae0a1c5a439bbccb95ee1a2e45b612c42bd1f1e0da5e46fa759d0121025411fadcdf6e41703eeba9b5e507d0de43863e1e2cfb1ef5dcdd8ed3e62bbf430247304402201d9295f0f58708e7286eaa5f0e078febd2c9f3da41bfd7c9e58a10d1d4ff75e9022056246286429756aca4b3f7456f68345fafd199a1b4c7c5480c74f8cfd9fb18c4012102d9886aab1b63baf6813d435693f2f8be99252a8950f0796f7ad883901ec20ad800000000"]'
+bcli29 -regtest submitpackage '["0300000000010125d29da0fc42bbdc0ab4c01eb772a9c543b71d0bbf4291bb38ac544adee47d490000000000fdffffff020000000000000000160014f388430fe333d86e018b7db4639aa32f383c8a1f00f2052a010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb7024730440220374145de40a11bcbd026ea561f875ec860215dd7bd25398016176704e337f17102201824e4eb302ae69d90c3543499e827fe0c7fac6720674eb397bbb9dbc144d3a1012102d9886aab1b63baf6813d435693f2f8be99252a8950f0796f7ad883901ec20ad800000000","0300000000010212f6c331ce6cddbd136504b4cbadb1488a131d657daecef352fec26c8c9b3fe10000000000fdffffff12f6c331ce6cddbd136504b4cbadb1488a131d657daecef352fec26c8c9b3fe10100000000fdffffff01e050fe29010000001600140afed7273b55799ecb61d9a64d52f95bd2fd7bb70247304402204ea136829cd08c80b01389c33eff37ca6e0b3e6a11b20fbf63ddb6dfc29465a8022010d36e685dd4ae0a1c5a439bbccb95ee1a2e45b612c42bd1f1e0da5e46fa759d0121025411fadcdf6e41703eeba9b5e507d0de43863e1e2cfb1ef5dcdd8ed3e62bbf430247304402201d9295f0f58708e7286eaa5f0e078febd2c9f3da41bfd7c9e58a10d1d4ff75e9022056246286429756aca4b3f7456f68345fafd199a1b4c7c5480c74f8cfd9fb18c4012102d9886aab1b63baf6813d435693f2f8be99252a8950f0796f7ad883901ec20ad800000000"]'
 ```
 ```bash
 {
