@@ -1,15 +1,25 @@
 # Testing ephemeral dust on Bitcoin 29
 
 The following instructions are meant to be followed after the [29.0 Relase Testing Guide](https://github.com/bitcoin-core/bitcoin-devwiki/wiki/29.0-Release-Candidate-Testing-Guide), you can refer to this guide for the initial environment setup.
-Specifically, we need to have an active instance of bitcoind on regtest as described [here](https://github.com/bitcoin-core/bitcoin-devwiki/wiki/29.0-Release-Candidate-Testing-Guide#steps-to-test).
 
-### Prerequisites
+### Relay transaction packages containing ephemeral dust
 
+An ephemeral dust output is a small output (below the dust treshold) that is created in a v3 zero-fee transaction and spent in a subsequent v3 transaction. The two transactions must be part of the same package. The output is ephemeral because it is both created and spent simultaneously. ([30239](https://github.com/bitcoin/bitcoin/pull/30239))
+
+#### Steps to Test
+
+Change the bitcoin.conf file to run on regtest.
+```bash
+echo "regtest=1" > $DATA_DIR_29/bitcoin.conf
+```
+Start the bitcoind session
+```bash
+bitcoind29 daemon
+```
 Create a wallet
 ```bash
 bcli29 -regtest createwallet ephemeral_dust
 ```
-
 ```bash
 {
   "name": "ephemeral_dust"
@@ -21,9 +31,7 @@ bcli29 -regtest generatetoaddress 101 $(bcli29 -regtest getnewaddress)
 ```
 ```bash
 [
-  "483b03c60db21c16f1d7fe5b823b437e92b4be5b85c8579b8f166865f91fa58b",
   # ... in total 101 hashes are displayed ...
-  "29a548fec6d6d8d4af9538439a0324bab7b6d723e7d9757ac2be85dc31af1fd9"
 ]
 ```
 We now have one regtest spendable UTXO.
