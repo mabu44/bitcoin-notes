@@ -65,7 +65,7 @@ echo $tx1_v2
 ```bash
 0200000001f3233102fad446fdc253f071546875f28a35f0c37db0d6533edafb42fe0a0df20000000000fdffffff0200000000000000001600143ffb8ed0f191dc9cf0e1c1259929abef643c0d1e00f2052a010000001600143e68cfe5855b03759822f114bead512f292d60bf00000000
 ```
-This is a v2 transaction (the first two digits are "02") and we need to change them to "03" to obtain a v3 transaction.
+This is a v2 transaction but we need a v3 transaction. We need to change the version bits: for this reason we replace the first two digits with "03".
 ```bash
 tx1="03${tx1_v2:2}"
 echo $tx1
