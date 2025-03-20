@@ -3,3 +3,4 @@ Disclaimer: These notes may contain errors or inaccuracies. If you spot any mist
 
 # Transactions
 ## [Scripts](scripts.md)
+## [Ephemeral dust](ephemeral_dust.md)
