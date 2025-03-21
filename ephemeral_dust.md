@@ -1,6 +1,6 @@
 # Testing ephemeral dust on Bitcoin 29
 
-The following instructions are meant to be followed after the [29.0 Relase Testing Guide](https://github.com/bitcoin-core/bitcoin-devwiki/wiki/29.0-Release-Candidate-Testing-Guide), you can refer to this guide for the initial environment setup.
+*IMPORTANT: This document has become part of the [29.0 Relase Testing Guide](https://github.com/bitcoin-core/bitcoin-devwiki/wiki/29.0-Release-Candidate-Testing-Guide) for Bitcoin Core, so you can find the latest version of these instructions [here](https://github.com/bitcoin-core/bitcoin-devwiki/wiki/29.0-Release-Candidate-Testing-Guide#22-relay-transaction-packages-containing-ephemeral-dust).*
 
 #### 2.2 Relay transaction packages containing ephemeral dust
 
