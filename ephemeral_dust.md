@@ -2,11 +2,11 @@
 
 The following instructions are meant to be followed after the [29.0 Relase Testing Guide](https://github.com/bitcoin-core/bitcoin-devwiki/wiki/29.0-Release-Candidate-Testing-Guide), you can refer to this guide for the initial environment setup.
 
-### Relay transaction packages containing ephemeral dust
+#### 2.2 Relay transaction packages containing ephemeral dust
 
 An ephemeral dust output is a small output (below the dust treshold) that is created in a v3 zero-fee transaction and spent in a subsequent v3 transaction. The two transactions must be part of the same package. The output is ephemeral because it is both created and spent simultaneously. ([30239](https://github.com/bitcoin/bitcoin/pull/30239))
 
-#### Get some regtest coins
+##### Get some regtest coins
 
 Change the bitcoin.conf file to run on regtest.
 ```bash
@@ -43,7 +43,7 @@ echo $coinbase_txid
 f20d0afe42fbda3e53d6b07dc3f0358af275685471f053c2fd46d4fa023123f3
 ```
 
-#### Create an ephemeral dust output
+##### Create an ephemeral dust output
 
 We need two new addresses: one for the dust output and one to which the coins will be sent.
 ```bash
@@ -74,7 +74,7 @@ echo $tx1
 0300000001f3233102fad446fdc253f071546875f28a35f0c37db0d6533edafb42fe0a0df20000000000fdffffff0200000000000000001600143ffb8ed0f191dc9cf0e1c1259929abef643c0d1e00f2052a010000001600143e68cfe5855b03759822f114bead512f292d60bf00000000
 ```
 
-### Destroy ephemeral dust
+##### Destroy ephemeral dust
 
 We decode the previously created transaction to get the transaction id and the scriptPubKey hex value, that are required in the next steps.
 ```bash
@@ -101,7 +101,7 @@ echo $tx2
 030000000222fcfa2784e89dc6a26573ecda31c9cec26e0c9148b4ca88244341a63209b7330000000000fdffffff22fcfa2784e89dc6a26573ecda31c9cec26e0c9148b4ca88244341a63209b7330100000000fdffffff01e050fe29010000001600143e68cfe5855b03759822f114bead512f292d60bf00000000
 ```
 
-### Signing
+##### Signing
 We sign the first transaction:
 ```bash
 tx1_signed=$(bcli29 -regtest signrawtransactionwithwallet $tx1 | jq -r .hex)
@@ -174,8 +174,12 @@ The same command on Bitcoin 28.1 would have failed with a result similar to the 
   ]
 }
 ```
+##### Cleanup
+```bash
+bcli29 -regtest stop && datadir-cleanup
+```
 
-#### Ideas for further testing:
+##### Ideas for further testing:
 - try with v2 transansactions (one of them is enough): the package should be rejected
 - add other non-dust outputs to the first transaction: the package should be accepted
 - add other dust outputs to the first transaction: the package should be rejected
