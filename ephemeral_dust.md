@@ -14,7 +14,7 @@ echo "regtest=1" > $DATA_DIR_29/bitcoin.conf
 ```
 Start the bitcoind session
 ```bash
-bitcoind29 daemon
+bitcoind29 -daemon
 ```
 Create a wallet
 ```bash
