@@ -130,3 +130,51 @@ Target: 00000000ffff0000000000000000000000000000000000000000000000000000
 ```
 
 This is sufficient proof of work for our local solo pool, but it falls short of the requirements for the Bitcoin network, which has a significantly higher difficulty target of around 121T. While it is theoretically possible to find a valid Bitcoin block in this way, the likelihood of this occurring is extremely low.
+
+## 5. Mine on regtest to find a block
+
+To test block creation, the above procedure can be run on [regtest](https://river.com/learn/terms/r/regtest/). However, please note that this is only possible if the current block height is at least 16, for [this reason](https://bitcoin.stackexchange.com/a/126220).
+
+The first blocks can be created using the following commands:
+
+```bash
+bitcoin-cli createwallet 'miner'
+temp_addr=$(bitcoin-cli getnewaddress 'generate' 'bech32')
+bitcoin-cli generatetoaddress 16 $addr
+```
+
+On ckpool.conf, the new port for bitcoind is 18443 (default for regtest) and a regtest bitcoin address can be obtained with:
+
+```bash
+miner_addr=$(bitcoin-cli getnewaddress 'miner' 'bech32')
+echo $miner_addr
+```
+
+When a share is produced by minerd, because the difficulty of the regtest network is 0, that share is also a valid block. CKPool will log something along those lines:
+
+```log
+[2025-05-26 17:25:33.025] Network diff set to 1.0
+[2025-05-26 17:34:25.551] Possible block solve diff 1.257313 !
+[2025-05-26 17:34:25.553] BLOCK ACCEPTED!
+[2025-05-26 17:34:25.554] Solved and confirmed block 19 by user.cpuminer
+[2025-05-26 17:34:25.554] User user:{"hashrate1m": "0", "hashrate5m": "0", "hashrate1hr": "0", "hashrate1d": "0", "hashrate7d": "0", "shares": 0, "authorised": 1748280340}
+[2025-05-26 17:34:25.554] Worker user.cpuminer:{"hashrate1m": "0", "hashrate5m": "0", "hashrate1hr": "0", "hashrate1d": "0", "hashrate7d": "0"}
+[2025-05-26 17:34:25.554] Block solved after 0 shares at 0.0% diff
+[2025-05-26 17:34:25.554] Submitting possible block solve share diff 1.257313 !
+```
+
+And the Bitcoin client:
+
+```log
+2025-05-26T17:34:25Z Saw new header hash=00000000cb9b12ac8040a0f6bb451f348c7291f56c85a2ed4b2f5e70fae75142 height=19
+2025-05-26T17:34:25Z UpdateTip: new best=00000000cb9b12ac8040a0f6bb451f348c7291f56c85a2ed4b2f5e70fae75142 height=19 version=0x20000000 log2_work=5.321928 tx=20 date='2025-05-26T17:32:33Z' progress=1.000000 cache=0.3MiB(19txo)
+2025-05-26T17:34:25Z [miner] AddToWallet 427332b7fc187410561fabfa082b9fd42f87cd8d599a6d665023fabcd1709678  new Confirmed (block=00000000cb9b12ac8040a0f6bb451f348c7291f56c85a2ed4b2f5e70fae75142, height=19, index=0)
+```
+
+To double check that the new coins have been generated to the miner address, it is possible to run:
+
+```bash
+bitcoin-cli getaddressinfo $miner_addr
+```
+
+In the response the number of hashes in the "use_txids" field should be equal to the number of mined blocks.
