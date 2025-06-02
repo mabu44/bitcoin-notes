@@ -23,7 +23,7 @@ Resulting program :unlock: : `<Sig> <PubKey> OP_DUP OP_HASH160 <PubKeyHash160> O
 - Output script :lock: : `OP_HASH160 <RedemScriptHash160> OP_EQUAL` (exactly as it is!)
 - Input script :key: : `...data and signatures... <RedeemScript>`
 
-Resulting program (if RedeemScript hash is correct) :unlock: : `...data and signatures... <RedeemScript>`
+Resulting program (if RedeemScript hash is correct) :unlock: : `...data and signatures... <RedeemScript>`. This script type was introduced in [BIP16](https://en.bitcoin.it/wiki/BIP_0016).
 
 ## P2WPKH
 - Output script :lock: : `OP_0 <PubKeyHash160>` (exactly as it is!)
