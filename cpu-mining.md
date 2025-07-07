@@ -9,7 +9,7 @@ A fully synchronized Bitcoin full-node client should be running with, at least, 
 ```conf
 rpcuser=[...]
 rpcpassword=[...]
-zmqpubhashblockhwm=tcp://127.0.0.1:28332
+zmqpubhashblock=tcp://127.0.0.1:28332
 ```
 
 The rpcuser value and a secure password for the rpcpassword can be chosen.
