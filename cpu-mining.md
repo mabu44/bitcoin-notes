@@ -2,61 +2,15 @@
 
 This draft provides some hints on running a Bitcoin mining full-node on a PC without GPUs, for **educational purposes**, as mining a block with a personal computer is **extremely** unlikely.
 
-## 1. Run a Bitcoin client as a server
+## 1. Run a Bitcoin client and a stratum server (a local solo pool)
 
-A fully synchronized Bitcoin full-node client should be running with, at least, the following options in *bitcoin.conf*:
+A fully synchronized Bitcoin full-node client should be running. At this point a stratum server (local solo pool) should be installed. The most used open source implementations are [CKPool](https://bitbucket.org/ckolivas/ckpool) and Public Pool.
 
-```conf
-rpcuser=[...]
-rpcpassword=[...]
-zmqpubhashblock=tcp://127.0.0.1:28332
-```
+In this example, CKPool is used. For its configuration please follow the [README-SOLOMINING file](https://bitbucket.org/ckolivas/ckpool/src/master/README-SOLOMINING) provided by CKPool.
 
-The rpcuser value and a secure password for the rpcpassword can be chosen.
+If you want to mine using the CPU you will have to set "mindiff" and "startdiff" to 1 in ckpool.conf, otherwise the pool will not be able to measure the very small hashrate provided to it.
 
-The ZMQ protocol offers a more efficient alternative to polling, allowing the miner to receive notifications when a new block is propagated through the Bitcoin network. The port number used for the ZMQ protocol can be customized.
-
-## 2. Run a solo pool locally
-[CKPool](https://bitbucket.org/ckolivas/ckpool) can be easily compiled from sources, public pool is also well known.
-
-The *ckpool.conf* file, located in the same folder as the ckpool executable, will contain settings similar to the following:
-
-```json
-{
-"btcd" :  [
-	{
-		"url" : "localhost:8332",
-		"auth" : "SEE_YOUR_RPCUSER_SETTING_ON_BITCOIN_CONF",
-		"pass" : "SEE_YOUR_RPCPASSWORD_SETTING_ON_BITCOIN_CONF",
-		"notify" : true
-	}
-],
-"btcaddress" : "#(YOUR_BTC_ADDRESS)#",
-"btcsig" : "/mined by ck/",
-"blockpoll" : 100,
-"donation" : 2.0,
-"nonce1length" : 4,
-"nonce2length" : 8,
-"update_interval" : 30,
-"version_mask" : "1fffe000",
-"serverurl" : [
-	"localhost:3334"
-],
-"mindiff" : 1,
-"startdiff" : 1,
-"maxdiff" : 0,
-"zmqblock" : "tcp://127.0.0.1:28332",
-"logdir" : "logs"
-}
-```
-
-The "mindiff" and "startdiff" parameters have been set to 1, as the default value of 42 would be too demanding for the CPU. This change has only a cosmetic effect with no impact on the blockchain or (non-existing) potential profits.
-
-The port of the "zmqblock" parameter has been set to the same value used in the configuration of the Bitcoin client.
-
-The "donation" parameter sets the percentage of block reward donated to the CKPool software developer upon finding a block.
-
-## 3. Point a miner to the pool
+## 2. Point a miner to the pool
 
 For CPU mining, [cpuminer](https://github.com/pooler/cpuminer/releases/tag/v2.5.1), can be used to connect to the local solo pool.
 The command would be similar to this:
@@ -67,7 +21,7 @@ The command would be similar to this:
 
 Note that the port "3334" must be the same specified in the "serverurl" section of *ckpool.conf*.
 
-## 4. Results
+## 3. Results
 
 The Bitcoin client will periodically receive requests from the local solo pool to create block templates, and these events will be logged by the "bitcoind" process in a similar manner to the following:
 
@@ -131,7 +85,7 @@ Target: 00000000ffff0000000000000000000000000000000000000000000000000000
 
 This is sufficient proof of work for our local solo pool, but it falls short of the requirements for the Bitcoin network, which has a significantly higher difficulty target of around 121T. While it is theoretically possible to find a valid Bitcoin block in this way, the likelihood of this occurring is extremely low.
 
-## 5. Mine on regtest to find a block
+## 4. Mine on regtest to find a block
 
 To test block creation, the above procedure can be run on [regtest](https://river.com/learn/terms/r/regtest/). However, please note that this is only possible if the current block height is at least 16, for [this reason](https://bitcoin.stackexchange.com/a/126220).
 
