@@ -6,7 +6,7 @@ This draft provides some hints on running a Bitcoin mining full-node on a PC wit
 
 A fully synchronized Bitcoin full-node client should be running. At this point a stratum server (local solo pool) should be installed. The most used open source implementations are [CKPool](https://bitbucket.org/ckolivas/ckpool) and Public Pool.
 
-In this example, CKPool is used. For its configuration please follow the [README-SOLOMINING file](https://bitbucket.org/ckolivas/ckpool/src/master/README-SOLOMINING) provided by CKPool.
+In this example, CKPool is used. For its configuration please follow the [README-SOLOMINING](https://bitbucket.org/ckolivas/ckpool/src/master/README-SOLOMINING).
 
 If you want to mine using the CPU you will have to set "mindiff" and "startdiff" to 1 in ckpool.conf, otherwise the pool will not be able to measure the very small hashrate provided to it.
 
