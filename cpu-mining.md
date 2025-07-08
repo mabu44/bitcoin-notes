@@ -1,4 +1,4 @@
-# Mine bitcoin in a fully independent way
+# Running a CPU mining Bitcoin node (for educational purposes)
 
 This draft provides some hints on running a Bitcoin mining full-node on a PC without GPUs, for **educational purposes**, as mining a block with a personal computer is **extremely** unlikely.
 
